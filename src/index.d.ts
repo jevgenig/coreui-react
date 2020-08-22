@@ -1,4 +1,4 @@
-import { HTMLProps } from 'react'
+import React,{ HTMLProps } from 'react'
 type ChildElement = any
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type className = string | className[] | object
@@ -279,7 +279,19 @@ interface CCreateElement {
   components?: object;
 }
 
-interface CDataTable {
+interface CDataTableFieldObject {
+  key: string;
+  _style: {width: string};
+  label?: string;
+  sorter?: boolean;
+  filter?: boolean;
+}
+
+type CDataTableField = CDataTableFieldObject | string;
+interface CDataTableScopedSlot<TData> {
+  (item: TData, index: number): React.ReactElement;
+}
+interface CDataTableProps<TData> {
   innerRef?: innerRef;
   overTableSlot?: ChildElement;
   columnHeaderSlot?: object;
@@ -289,15 +301,15 @@ interface CDataTable {
   noItemsView?: object;
   captionSlot?: ChildElement;
   underTableSlot?: ChildElement;
-  scopedSlots?: object;
+  scopedSlots?: {[K: string]: CDataTableScopedSlot<TData>};
   theadTopSlot?: ChildElement;
   loadingSlot?: ChildElement;
   loading?: boolean;
-  fields?: Array<any>;
+  fields?: CDataTableField[];
   pagination?: boolean | object;
   activePage?: number;
   itemsPerPage?: number;
-  items?: Array<any>;
+  items?: TData[];
   sorter?: boolean | object;
   clickableRows?: boolean;
   columnFilter?: boolean | object;
@@ -1080,7 +1092,7 @@ export declare const CCol: (props: CCol) => any;
 export declare const CCollapse: (props: CCollapse) => any;
 export declare const CContainer: (props: CContainer) => any;
 export declare const CCreateElement: (props: CCreateElement) => any;
-export declare const CDataTable: (props: CDataTable) => any;
+export declare const CDataTable: <TData>(p :CDataTableProps<TData>) => React.ReactElement<CDataTableProps<TData>>;
 export declare const CDropdown: (props: CDropdown) => any;
 export declare const CDropdownItem: (props: CDropdownItem) => any;
 export declare const CDropdownMenu: (props: CDropdownMenu) => any;
